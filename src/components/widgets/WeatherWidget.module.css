@@ -1,0 +1,108 @@
+.weatherCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  height: 100%;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.weatherInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.weatherMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weatherIcon {
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+}
+
+.tempContainer {
+  display: flex;
+  align-items: flex-start;
+}
+
+.temperature {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.unit {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 2px;
+}
+
+.weatherDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weatherCondition {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.weatherStats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.loadingWeather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 130px;
+}
+
+.loadingAnimation {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+.loadingWeather p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.errorWeather {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 130px;
+  text-align: center;
+}
+
+.errorWeather p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

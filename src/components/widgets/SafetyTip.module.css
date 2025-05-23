@@ -1,0 +1,89 @@
+.safetyTipCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.tipContent {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+  margin-bottom: 16px;
+}
+
+.tipIconContainer {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 193, 7, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tipIcon {
+  color: var(--warning-color);
+  font-size: 1.2rem;
+}
+
+.tipText {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+.tipControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tipButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.tipButton:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.tipIndicators {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tipIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ddd;
+  transition: all 0.3s;
+}
+
+.tipIndicator.active {
+  background-color: var(--warning-color);
+  width: 10px;
+  height: 10px;
+}
