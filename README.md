@@ -123,5 +123,6 @@ This project is for educational and demonstration purposes.
 - [Flask](https://flask.palletsprojects.com/)
 
 ---
+PPT LINK:https://www.canva.com/design/DAGoUzYkALk/Gd8flw-MPcyjZ5DrKmHzgw/edit?utm_content=DAGoUzYkALk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 *For any issues or contributions, please open an issue or pull request!*
