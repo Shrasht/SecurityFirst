@@ -4,7 +4,7 @@ A full-stack safety and navigation application that helps users find the safest 
 
 ---
 
-## 🚀 Features
+##  Features
 
 - **Safe Route Planning:**
   - Visualize and select the safest routes using HERE Maps, with safety scoring and route highlights.
