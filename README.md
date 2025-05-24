@@ -1,4 +1,4 @@
-# SafeRoutes
+# SecurityFirst
 
 A full-stack safety and navigation application that helps users find the safest routes, share live location, send emergency alerts, and manage a personal safety profile. Built with React (frontend), Flask (backend), and HERE Maps API.
 
