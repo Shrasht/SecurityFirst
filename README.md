@@ -73,7 +73,7 @@ flask run
 ## 📂 Project Structure
 
 ```
-Safety2/
+SecurityFirst/
 │
 ├── backend/
 │   └── routes/
