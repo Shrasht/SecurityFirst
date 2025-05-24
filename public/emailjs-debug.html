@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EmailJS Debug Tool</title>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+    ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      button {
+        background: #4caf50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+      }
+      #result {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        background: #f9f9f9;
+        white-space: pre-wrap;
+        display: none;
+      }
+      .success {
+        border-color: #4caf50 !important;
+        background: #e7f7e7 !important;
+      }
+      .error {
+        border-color: #f44336 !important;
+        background: #ffebee !important;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>EmailJS Debug Tool</h1>
+    <p>Use this tool to test your EmailJS configuration and connection.</p>
+
+    <div class="form-group">
+      <label for="publicKey">Public Key:</label>
+      <input
+        type="text"
+        id="publicKey"
+        placeholder="Your EmailJS Public Key"
+        value="Sztbu2xNTjpP_dAyq"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="serviceId">Service ID:</label>
+      <input
+        type="text"
+        id="serviceId"
+        placeholder="Your EmailJS Service ID"
+        value="safety_service"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="templateId">Template ID:</label>
+      <input
+        type="text"
+        id="templateId"
+        placeholder="Your EmailJS Template ID"
+        value="emergency_template"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="toEmail">Test Email (to send to):</label>
+      <input type="email" id="toEmail" placeholder="recipient@example.com" />
+    </div>
+
+    <div class="form-group">
+      <label for="toName">Recipient Name:</label>
+      <input
+        type="text"
+        id="toName"
+        placeholder="Recipient Name"
+        value="Test User"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="fromName">Sender Name:</label>
+      <input
+        type="text"
+        id="fromName"
+        placeholder="Your Name"
+        value="Safety App"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="message">Test Message:</label>
+      <textarea id="message" rows="3" placeholder="Test emergency message">
+This is a test emergency message.</textarea
+      >
+    </div>
+
+    <button onclick="sendTestEmail()">Send Test Email</button>
+
+    <div id="result"></div>
+
+    <script>
+      function sendTestEmail() {
+        const publicKey = document.getElementById("publicKey").value;
+        const serviceId = document.getElementById("serviceId").value;
+        const templateId = document.getElementById("templateId").value;
+        const toEmail = document.getElementById("toEmail").value;
+        const toName = document.getElementById("toName").value;
+        const fromName = document.getElementById("fromName").value;
+        const message = document.getElementById("message").value;
+
+        if (!publicKey || !serviceId || !templateId || !toEmail) {
+          showResult("Please fill in all required fields", false);
+          return;
+        }
+
+        // Initialize EmailJS
+        emailjs.init(publicKey);
+
+        const templateParams = {
+          to_name: toName,
+          from_name: fromName,
+          message: message,
+          user_location: "Test location (19.1136, 72.8697)",
+          location_link: "https://www.google.com/maps?q=19.1136,72.8697",
+          to_email: toEmail,
+          reply_to: "",
+          timestamp: new Date().toLocaleString(),
+        };
+
+        // Show sending status
+        showResult("Sending email...", null);
+
+        // Send the email
+        emailjs.send(serviceId, templateId, templateParams).then(
+          function (response) {
+            console.log("SUCCESS!", response.status, response.text);
+            showResult(
+              "Email sent successfully!\n\n" +
+                "Status: " +
+                response.status +
+                "\n" +
+                "Response: " +
+                response.text +
+                "\n\n" +
+                "Check the recipient inbox to verify delivery.",
+              true
+            );
+          },
+          function (error) {
+            console.log("FAILED...", error);
+            showResult(
+              "Failed to send email!\n\n" +
+                "Error: " +
+                JSON.stringify(error) +
+                "\n\n" +
+                "Check your EmailJS configuration and try again.",
+              false
+            );
+          }
+        );
+      }
+
+      function showResult(message, success) {
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerText = message;
+        resultDiv.style.display = "block";
+
+        resultDiv.className = "";
+        if (success === true) {
+          resultDiv.classList.add("success");
+        } else if (success === false) {
+          resultDiv.classList.add("error");
+        }
+      }
+    </script>
+  </body>
+</html>

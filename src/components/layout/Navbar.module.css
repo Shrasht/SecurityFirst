@@ -52,6 +52,34 @@
   color: var(--primary-color);
 }
 
+.emergencyButton {
+  margin-right: 15px;
+}
+
+.emergencyLink {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--danger-color);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.emergencyLink:hover {
+  background-color: #ff3939;
+  color: white;
+}
+
+.emergencyLink svg {
+  font-size: 1rem;
+}
+  color: var(--primary-color);
+}
+
 .btnRegister {
   background-color: var(--primary-color);
   color: white;
@@ -103,7 +131,7 @@
   z-index: 100;
 }
 
-.profileDropdown a, 
+.profileDropdown a,
 .profileDropdown button {
   padding: 10px 15px;
   text-align: left;
@@ -114,7 +142,7 @@
   transition: background-color 0.2s;
 }
 
-.profileDropdown a:hover, 
+.profileDropdown a:hover,
 .profileDropdown button:hover {
   background-color: #f5f5f5;
   color: var(--primary-color);
@@ -135,11 +163,11 @@
   .navContainer {
     padding: 0 1rem;
   }
-  
+
   .mobileMenuIcon {
     display: block;
   }
-  
+
   .navMenu {
     display: flex;
     flex-direction: column;
@@ -154,30 +182,30 @@
     padding: 30px 0;
     overflow-y: auto;
   }
-  
+
   .navMenu.active {
     left: 0;
   }
-  
+
   .navItem {
     margin: 10px 0;
     width: 100%;
     text-align: center;
   }
-  
+
   .navLink {
     display: block;
     padding: 12px 0;
     width: 100%;
   }
-  
+
   .navNotification,
   .navProfile {
     margin: 10px 0;
     width: 100%;
     text-align: center;
   }
-  
+
   .profileDropdown {
     position: static;
     box-shadow: none;
@@ -185,7 +213,7 @@
     margin-top: 10px;
     display: none;
   }
-  
+
   .navProfile:hover .profileDropdown {
     display: none;
   }

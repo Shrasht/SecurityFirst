@@ -1,3 +1,41 @@
+/* Base styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Map styles */
 .mapLoading {
   height: 100%;
   display: flex;
@@ -6,48 +44,178 @@
   background-color: #f5f5f5;
   color: #666;
   font-size: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
 }
 
 .mapError {
-  height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #fff0f0;
-  color: #d32f2f;
+  padding: 2rem;
   text-align: center;
-  padding: 20px;
-  font-size: 0.9rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
+  min-height: 300px;
+}
+
+.errorIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.errorDetails {
+  font-family: monospace;
+  background-color: #f8f8f8;
+  padding: 0.75rem;
+  border-radius: 4px;
+  color: #e53935;
+  font-size: 0.85rem;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.retryButton {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 1rem;
+}
+
+.retryButton:hover {
+  background-color: #1976d2;
 }
 
 /* InfoWindow styles */
 .infoWindow {
-  padding: 5px;
-  max-width: 200px;
+  padding: 12px;
+  max-width: 220px;
+  font-family: "Poppins", sans-serif;
 }
 
 .infoHeader {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 6px;
-  font-weight: 500;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--primary-color);
+}
+
+.infoDescription {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
 .infoIcon {
-  font-size: 1.1rem;
+  margin-right: 4px;
+  font-size: 14px;
 }
 
-.infoDistance {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
+.infoCoordinates {
+  background-color: rgba(0, 0, 0, 0.04);
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-light);
+  font-family: monospace;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.infoLocationDetails {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.04);
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-light);
+  font-family: monospace;
 }
 
 .infoActions {
   display: flex;
   justify-content: space-between;
   gap: 5px;
+}
+
+/* Location button styles */
+.locationButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 10px;
+}
+
+.locationButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.locationButton.locating {
+  animation: pulse 1.5s infinite;
+}
+
+.pulseDot {
+  position: relative;
+}
+
+.pulseDot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: rgba(25, 118, 210, 0.4);
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulse-map 1.5s infinite;
+}
+
+@keyframes pulse-map {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
 }
 
 .infoButton {
@@ -62,4 +230,1243 @@
 
 .infoButton:hover {
   background-color: #e0e0e0;
+}
+
+/* Custom marker styles */
+.currentLocationMarker {
+  position: relative;
+  width: 60px; /* Much larger for better visibility */
+  height: 60px; /* Much larger for better visibility */
+}
+
+.markerCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px; /* Much larger for better visibility */
+  height: 28px; /* Much larger for better visibility */
+  background-color: #1976d2;
+  border: 4px solid white; /* Thicker border */
+  border-radius: 50%;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+  z-index: 1;
+}
+
+.markerPulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px; /* Much larger pulse */
+  height: 60px; /* Much larger pulse */
+  background-color: rgba(25, 118, 210, 0.4);
+  border-radius: 50%;
+  animation: marker-pulse 2s infinite;
+  z-index: 0;
+}
+
+@keyframes marker-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Destination marker styles */
+.destinationMarker {
+  position: relative;
+  width: 50px; /* Much larger for better visibility */
+  height: 65px; /* Much larger for better visibility */
+  transform: translate(-50%, -100%);
+}
+
+.markerFlag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px; /* Much larger flag */
+  height: 55px; /* Much larger flag */
+  background-color: #f44336;
+  border-radius: 5px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Stronger shadow */
+  animation: bounce 1.5s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+.markerFlag:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent; /* Larger triangle */
+  border-right: 15px solid transparent; /* Larger triangle */
+  border-top: 15px solid #f44336; /* Larger triangle */
+}
+
+/* Waypoint marker style */
+.waypointMarker {
+  width: 14px;
+  height: 14px;
+  background-color: #ffc107;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.mapWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.mapContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mapAttribution {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #666;
+}
+
+/* Location search styles */
+.locationSearchContainer {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+  z-index: 100;
+}
+
+.searchInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.locationSearchInput {
+  width: 100%;
+  padding: 12px 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.locationSearchInput:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: #666;
+  font-size: 16px;
+}
+
+.clearIcon {
+  position: absolute;
+  right: 12px;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.clearIcon:hover {
+  color: #333;
+}
+
+.resultsDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.resultItem {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.resultItem:last-child {
+  border-bottom: none;
+}
+
+.resultItem:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.resultItemTitle {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.resultItemAddress {
+  font-size: 12px;
+  color: #666;
+}
+
+.recentHeader {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #999;
+  background-color: rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recentIcon {
+  color: #999;
+  margin-right: 8px;
+  font-size: 12px;
+}
+
+.loaderSmall {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  right: 12px;
+}
+
+/* Route Planner styles */
+.routePlannerContainer {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18), 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 28px;
+  margin-bottom: 24px;
+  border: 1px solid #e1e7f0;
+  background-image: linear-gradient(to bottom, #ffffff, #f9fbff);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.routePlannerContainer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22), 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+.routePlannerInputs {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 8px;
+}
+
+.locationInput {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.locationInput label {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.swapButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.swapButton:hover {
+  transform: scale(1.05);
+  background-color: var(--primary-dark);
+}
+
+.calculateButton {
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.calculateButton:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.calculateButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.savedPlacesBar {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+.savedPlacesTitle {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.savedPlacesScroll {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd #f5f5f5;
+}
+
+.savedPlacesScroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.savedPlacesScroll::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.savedPlacesScroll::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border-radius: 4px;
+}
+
+.savedPlaceTag {
+  padding: 6px 10px;
+  background-color: #f0f7ff;
+  border-radius: 20px;
+  font-size: 12px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.savedPlaceTag:hover {
+  background-color: #e0efff;
+}
+
+.starIcon {
+  color: #ffb800;
+  font-size: 10px;
+}
+
+/* Map with Route Planner styles */
+.mapWithRoutePlannerContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+
+.mapContainerWithPlanner {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-height: 900px; /* Increased from 700px to 900px for larger map display */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mapContainerWithPlanner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 6px 15px rgba(0, 0, 0, 0.18);
+}
+
+.routeControlsOverlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.trafficButton {
+  background-color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+.trafficButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.trafficButton.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Route info bubble styles */
+.routeInfoBubble {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  padding: 8px 12px;
+  margin-top: -25px;
+  pointer-events: none;
+  transform: translateY(-100%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.routeInfoContent {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.routeType {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--primary-color);
+  margin-bottom: 2px;
+}
+
+.routeStats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.routeSeparator {
+  font-size: 8px;
+  opacity: 0.6;
+}
+
+.routeDistance,
+.routeDuration {
+  font-weight: 500;
+}
+
+/* Transportation mode selection */
+.transportModeContainer {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.transportModeTitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.transportModeOptions {
+  display: flex;
+  gap: 1rem;
+}
+
+.transportModeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  color: #757575;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.transportModeButton:hover {
+  background: #e9e9e9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transportModeButton.active {
+  background: #2196f3;
+  color: white;
+  border-color: #1976d2;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+/* Navigation Controls */
+.navigationContainer {
+  margin-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1.5rem;
+}
+
+.startNavigationButton {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.startNavigationButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049 0%, #43a047 100%);
+}
+
+.startNavigationButton:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.navigationControlsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e3f2fd;
+  box-shadow: 0 8px 32px rgba(33, 150, 243, 0.1);
+}
+
+.navigationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e3f2fd;
+}
+
+.navigationHeader h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1565c0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navigationHeader h3::before {
+  content: "🧭";
+  font-size: 1.4rem;
+}
+
+.stopNavigationButton {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
+.stopNavigationButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+}
+
+.currentInstruction {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3f8ff 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 5px solid #2196f3;
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.currentInstruction::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2196f3, #21cbf3, #2196f3);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.instructionIcon {
+  font-size: 2rem;
+  color: #2196f3;
+  background: white;
+  padding: 0.75rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  height: 60px;
+}
+
+.instructionText {
+  flex: 1;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #1565c0;
+  font-weight: 500;
+}
+
+.instructionDistance {
+  font-size: 1rem;
+  color: #2196f3;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  background: rgba(33, 150, 243, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.navigationControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e3f2fd;
+}
+
+.navControlButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.navControlButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #f8f9fa;
+  border-color: #e9ecef;
+}
+
+.navControlButton:not(:disabled):hover {
+  background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
+  color: white;
+  border-color: #2196f3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.navControlButton:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.instructionCounter {
+  font-size: 1rem;
+  color: #2196f3;
+  font-weight: 600;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3f8ff 100%);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 2px solid #bbdefb;
+}
+
+.instructionsList {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 2px solid #e3f2fd;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 20px rgba(33, 150, 243, 0.08);
+}
+
+.instructionItem {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f0f4ff;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  background: linear-gradient(135deg, #fff 0%, #fafbff 100%);
+}
+
+.instructionItem:last-child {
+  border-bottom: none;
+}
+
+.instructionItem:hover {
+  background: linear-gradient(135deg, #f3f8ff 0%, #e8f2ff 100%);
+  transform: translateX(4px);
+  box-shadow: 0 2px 12px rgba(33, 150, 243, 0.1);
+}
+
+.instructionItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: transparent;
+  transition: all 0.3s;
+}
+
+.instructionItem:hover::before {
+  background: linear-gradient(180deg, #2196f3, #21cbf3);
+}
+
+.activeInstruction {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f0f7ff 100%) !important;
+  border-left: 4px solid #2196f3;
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.2);
+}
+
+.activeInstruction::before {
+  background: linear-gradient(180deg, #2196f3, #21cbf3) !important;
+}
+
+.instructionItemNumber {
+  background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-right: 1rem;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+  border: 2px solid white;
+}
+
+.activeInstruction .instructionItemNumber {
+  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+  animation: pulse-nav 2s infinite;
+  box-shadow: 0 4px 16px rgba(21, 101, 192, 0.4);
+}
+
+@keyframes pulse-nav {
+  0% {
+    box-shadow: 0 0 0 0 rgba(21, 101, 192, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(21, 101, 192, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(21, 101, 192, 0);
+  }
+}
+
+.instructionItemText {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #37474f;
+  font-weight: 500;
+}
+
+.activeInstruction .instructionItemText {
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.instructionItemDistance {
+  font-size: 0.85rem;
+  color: #2196f3;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  background: linear-gradient(
+    135deg,
+    rgba(33, 150, 243, 0.1) 0%,
+    rgba(33, 203, 243, 0.1) 100%
+  );
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  display: inline-block;
+  border: 1px solid rgba(33, 150, 243, 0.2);
+}
+
+.activeInstruction .instructionItemDistance {
+  background: linear-gradient(
+    135deg,
+    rgba(21, 101, 192, 0.15) 0%,
+    rgba(13, 71, 161, 0.15) 100%
+  );
+  color: #1565c0;
+  border-color: rgba(21, 101, 192, 0.3);
+}
+
+/* Mapbox specific styles */
+.mapboxContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.mapLoading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 1000;
+}
+
+.mapLoading p {
+  margin-top: 16px;
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Mapbox marker popup styles */
+.markerPopup {
+  padding: 12px;
+  min-width: 150px;
+  font-family: "Poppins", sans-serif;
+}
+
+.markerPopup h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.markerPopup p {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Mapbox route popup styles */
+.routePopup {
+  padding: 16px;
+  min-width: 200px;
+  font-family: "Poppins", sans-serif;
+}
+
+.routePopup h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.routePopup p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.routePopup strong {
+  color: var(--primary-color);
+}
+
+/* Standard marker for Mapbox */
+.standardMarker {
+  width: 24px;
+  height: 24px;
+  background-color: #2196f3;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Enhanced visibility for all markers */
+.mapboxContainer .mapboxgl-marker {
+  cursor: pointer;
+  z-index: 10;
+}
+
+.mapboxContainer .mapboxgl-popup {
+  z-index: 100;
+}
+
+.mapboxContainer .mapboxgl-popup-content {
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mapboxContainer .mapboxgl-popup-close-button {
+  font-size: 18px;
+  padding: 8px;
+  color: #999;
+}
+
+.mapboxContainer .mapboxgl-popup-close-button:hover {
+  color: #333;
+}
+
+/* Safest Route Enhanced Highlighting */
+.safestRouteHighlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.safestRouteHighlight::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    #4caf50,
+    #2e7d32,
+    #1b5e20,
+    #2e7d32,
+    #4caf50
+  );
+  background-size: 400% 400%;
+  border-radius: 12px;
+  z-index: -1;
+  animation: safestRouteGlow 3s ease-in-out infinite;
+}
+
+@keyframes safestRouteGlow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+  }
+  50% {
+    background-position: 100% 50%;
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+  }
+}
+
+/* Route line animations - these would be applied via JavaScript to HERE Maps polylines */
+.safestRoutePolyline {
+  stroke-dasharray: 10, 5;
+  stroke-dashoffset: 0;
+  animation: routeFlow 2s linear infinite;
+}
+
+@keyframes routeFlow {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 15;
+  }
+}
+
+/* Enhanced route marker styles */
+.safestRouteMarker {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.5);
+  animation: markerPulse 2s ease-in-out infinite;
+}
+
+.safestRouteMarker::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: rgba(76, 175, 80, 0.3);
+  border-radius: 50%;
+  animation: pulseRing 2s ease-in-out infinite;
+}
+
+@keyframes markerPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Route info bubble enhancements for safest route */
+.safestRouteInfoBubble {
+  background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  padding: 12px 16px;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+}
+
+.safestRouteInfoBubble::before {
+  content: "🛡️";
+  position: absolute;
+  top: -8px;
+  left: 8px;
+  background: #4caf50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.safestRouteInfoContent {
+  text-align: center;
+}
+
+.safestRouteType {
+  font-weight: 700;
+  font-size: 14px;
+  color: #2e7d32;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.safestRouteStats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #1b5e20;
+  font-weight: 600;
+}
+
+.safestRouteBadge {
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  animation: badgeGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes badgeGlow {
+  0% {
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+  }
+  100% {
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.6);
+  }
+}
+
+/* Enhanced map controls for safety features */
+.safetyToggleButton {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+}
+
+.safetyToggleButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+}
+
+.safetyToggleButton.active {
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  animation: activeButtonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes activeButtonPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Safest route card highlighting */
+.safestRouteCard {
+  position: relative;
+  border: 3px solid #4caf50;
+  background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  animation: cardGlow 2s ease-in-out infinite;
+}
+
+.safestRouteCard::before {
+  content: "🏆 SAFEST ROUTE";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+  color: white;
+  text-align: center;
+  padding: 8px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 10;
+}
+
+@keyframes cardGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+  }
 }

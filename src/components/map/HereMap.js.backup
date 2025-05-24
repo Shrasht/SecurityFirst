@@ -1,0 +1,692 @@
+import React, { useEffect, useRef, useState } from "react";
+import styles from "./Map.module.css";
+import { HERE_MAPS_API_KEY } from "../../config";
+import { FaLocationArrow, FaLayerGroup } from "react-icons/fa";
+
+// Using HERE Maps API key from config file with fallback
+const API_KEY = HERE_MAPS_API_KEY || "iX6ozBxa5iu1te5t17ppcdJd4HwEXikoncIJgIh7WK8";
+
+// Default to Andheri, Mumbai coordinates if no location provided
+const ANDHERI_COORDINATES = {
+  lat: 19.1136,
+  lng: 72.8697,
+};
+
+const HereMap = ({
+  center,
+  zoom = 14,
+  markers = [],
+  routes = [],
+  showTraffic = false,
+}) => {
+  const mapRef = useRef(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapObject, setMapObject] = useState(null);
+  const [error, setError] = useState(null);
+  // Load HERE Maps scripts
+  useEffect(() => {
+    if (!window.H) {
+      const loadScript = (url) => {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = url;
+          script.async = false; // Changed to false to ensure correct loading order
+          script.defer = true;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      };
+
+      const loadCSS = (url) => {
+        return new Promise((resolve) => {
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.type = "text/css";
+          link.href = url;
+          link.onload = resolve;
+          document.head.appendChild(link);
+        });
+      };
+
+      const loadMapScripts = async () => {
+        try {
+          console.log("Loading HERE Maps scripts...");
+          // Load scripts in sequence to maintain dependencies
+          await loadScript("https://js.api.here.com/v3/3.1/mapsjs-core.js");
+          console.log("Core script loaded");
+          
+          await loadScript("https://js.api.here.com/v3/3.1/mapsjs-service.js");
+          console.log("Service script loaded");
+          
+          await loadScript("https://js.api.here.com/v3/3.1/mapsjs-mapevents.js");
+          console.log("Map events script loaded");
+          
+          await loadScript("https://js.api.here.com/v3/3.1/mapsjs-ui.js");
+          console.log("UI script loaded");
+          
+          await loadCSS("https://js.api.here.com/v3/3.1/mapsjs-ui.css");
+          console.log("CSS loaded");
+
+          // Add a small delay to ensure all scripts are fully initialized
+          setTimeout(() => {
+            console.log("All scripts loaded, initializing map...");
+            initMap();
+          }, 300);
+        } catch (err) {
+          console.error("Error loading HERE Maps:", err);
+          setError("Failed to load map resources: " + (err.message || "Unknown error"));
+        }
+      };
+
+      loadMapScripts();
+    } else {
+      console.log("HERE Maps already loaded, initializing map...");
+      initMap();
+    }
+  }, []);
+    // Initialize map with enhanced options
+  const initMap = () => {
+    if (!mapRef.current) {
+      console.error("Map container reference not available");
+      setError("Map container not found");
+      return;
+    }
+      if (!window.H) {
+      console.error("HERE Maps API not loaded");
+      setError("Maps API not loaded correctly");
+      return;
+    }
+    
+    if (!API_KEY) {
+      console.error("HERE Maps API key is missing");
+      setError("Maps API key not found. Check your environment variables or config.js");
+      return;
+    }
+    
+    try {
+      // Log API key safely
+      console.log("Initializing map with API key:", typeof API_KEY === 'string' ? `${API_KEY.substring(0, 3)}...` : 'invalid type');
+      
+      // Initialize the platform object
+      const platform = new window.H.service.Platform({
+        apikey: API_KEY
+      });
+      
+      // Check if platform was initialized properly
+      if (!platform) {
+        throw new Error("Failed to initialize platform");
+      }
+
+      console.log("Platform initialized, creating default layers");
+      // Obtain the default map types from the platform object
+      const defaultLayers = platform.createDefaultLayers();
+      
+      if (!defaultLayers || !defaultLayers.vector || !defaultLayers.vector.normal || !defaultLayers.vector.normal.map) {
+        throw new Error("Failed to create default layers");
+      }
+        console.log("Default layers created, initializing map");
+      
+      try {
+        // Simplified map options
+        const mapOptions = {
+          center: center
+            ? { lat: center.lat, lng: center.lng }
+            : ANDHERI_COORDINATES,
+          zoom: zoom,
+          pixelRatio: window.devicePixelRatio || 1
+        };
+        
+        console.log("Map options:", JSON.stringify(mapOptions));
+        
+        // Initialize the map with simplified options
+        const map = new window.H.Map(
+          mapRef.current,
+          defaultLayers.vector.normal.map,
+          mapOptions
+        );
+        
+        console.log("Map initialized successfully");
+        
+        // Enable smooth map interaction with better performance
+        map.getViewPort().setPadding(0, 0, 0, 0);
+        
+        console.log("Adding map behaviors");
+        // Add behavior in a try-catch to isolate potential issues
+        try {
+          const mapEvents = new window.H.mapevents.MapEvents(map);
+          const behavior = new window.H.mapevents.Behavior(mapEvents);
+          behavior.enable();
+          console.log("Map behavior added successfully");        } catch (behaviorError) {
+          console.error("Error adding map behavior:", behaviorError);
+          // Continue execution even if behavior fails
+        }
+        
+        console.log("Adding UI components");
+        let ui;
+        try {
+          // Create UI with error handling
+          ui = window.H.ui.UI.createDefault(map, defaultLayers);
+          console.log("Default UI created successfully");
+        } catch (uiError) {
+          console.error("Error creating UI:", uiError);
+          // Create a simpler UI if default fails
+          try {
+            ui = new window.H.ui.UI(map);
+            console.log("Simple UI created as fallback");
+          } catch (simpleUiError) {
+            console.error("Error creating simple UI:", simpleUiError);
+            // Continue without UI if both approaches fail
+          }
+        }
+
+        // Only add custom controls if UI was successfully created
+        if (ui) {
+          try {
+            // Add custom geolocation button with pulse animation
+            const locationButton = new window.H.ui.Control("custom-location", {
+              position: "bottom-right",
+              alignment: "right",
+            });            const locationButtonElement = document.createElement("div");
+            locationButtonElement.className = styles.locationButton;
+            locationButtonElement.innerHTML = `
+              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#1976d2" stroke-width="2" fill="none">
+                <circle cx="12" cy="12" r="8"></circle>
+                <line x1="12" y1="2" x2="12" y2="4"></line>
+                <line x1="12" y1="20" x2="12" y2="22"></line>
+                <line x1="20" y1="12" x2="22" y2="12"></line>
+                <line x1="2" y1="12" x2="4" y2="12"></line>
+              </svg>
+            `;
+
+            locationButtonElement.addEventListener("click", () => {
+              if (navigator.geolocation) {
+                locationButtonElement.classList.add(styles.locating);
+                navigator.geolocation.getCurrentPosition(
+                  (position) => {
+                    const { latitude, longitude } = position.coords;
+                    map.setCenter({ lat: latitude, lng: longitude });
+                    map.setZoom(16);
+                    setTimeout(() => {
+                      locationButtonElement.classList.remove(styles.locating);
+                    }, 1000);
+                  },
+                  (error) => {
+                    console.error("Error getting location:", error);
+                    locationButtonElement.classList.remove(styles.locating);
+                  },
+                  { enableHighAccuracy: true, timeout: 10000 }
+                );
+              }
+            });
+
+            locationButton.setAlignment("right");
+            locationButton.addChild(locationButtonElement);
+            ui.addControl("custom-location", locationButton);
+          } catch (controlError) {
+            console.error("Error adding location control:", controlError);
+            // Continue without the custom control if it fails
+          }
+        }        // Make responsive
+        console.log("Adding resize listener");
+        const handleResize = () => {
+          try {
+            map.getViewPort().resize();
+          } catch (resizeError) {
+            console.error("Error on map resize:", resizeError);
+          }
+        };
+        
+        window.addEventListener("resize", handleResize);
+
+        // Store map object with all necessary components
+        const mapObj = { 
+          map, 
+          platform, 
+          ui, 
+          // Only include behavior if it was successfully created
+          ...(behavior && { behavior })
+        };
+        
+        console.log("Map fully initialized, setting state");
+        setMapObject(mapObj);
+        setMapLoaded(true);
+
+        // Add markers if available
+        if (markers && markers.length) {
+          console.log(`Adding ${markers.length} markers to map`);
+          addMarkers(mapObj, markers);
+        }
+
+        // Return cleanup function
+        return () => {
+          console.log("Cleaning up map");
+          window.removeEventListener("resize", handleResize);
+          try {
+            map.dispose();
+          } catch (disposeError) {
+            console.error("Error disposing map:", disposeError);
+          }
+        };
+      } catch (innerErr) {
+        console.error("Error during map initialization:", innerErr);
+        throw innerErr; // Re-throw to be caught by outer try-catch
+      }
+    } catch (err) {
+      console.error("Error initializing HERE Maps:", err);
+      setError(`Failed to initialize map: ${err.message || 'Unknown error'}`);
+    }  }; 
+  
+  // Add markers to the map with enhanced styling and functionality
+  const addMarkers = (mapObj, markersData) => {
+    if (!mapObj || !markersData.length) return;
+    
+    console.log(`Adding ${markersData.length} markers to the map`);
+    
+    try {
+      const { map, ui } = mapObj;
+      if (!map) {
+        console.error("Map object is not available for adding markers");
+        return;
+      }
+      
+      const mapMarkers = [];
+
+      // Create a marker group for better management
+      const markerGroup = new window.H.map.Group();
+
+      // Add new markers
+      markersData.forEach((marker, index) => {
+        try {
+          const { lat, lng, title, isCurrentLocation, type } = marker;
+          
+          if (!lat || !lng) {
+            console.warn(`Marker ${index} is missing coordinates, skipping`);
+            return;
+          }
+          
+          console.log(`Adding marker at lat:${lat}, lng:${lng}`);
+          
+          let mapMarker;
+
+          // Create custom marker for current location with pulsing effect
+          if (isCurrentLocation) {
+            try {
+              // Create a DOM Icon for current location with visual indication
+              const currentLocIcon = new window.H.map.DomIcon(
+                `<div class="${styles.currentLocationMarker}">
+                   <div class="${styles.markerPulse}"></div>
+                   <div class="${styles.markerCenter}"></div>
+                 </div>`
+              );
+              mapMarker = new window.H.map.DomMarker(
+                { lat, lng },
+                { icon: currentLocIcon }
+              );
+            } catch (domMarkerError) {
+              console.error("Error creating DOM marker, falling back to standard marker:", domMarkerError);
+              // Fallback to standard marker if DOM marker fails
+              mapMarker = new window.H.map.Marker({ lat, lng });
+            }
+          } else {
+            // Regular marker for other locations
+            mapMarker = new window.H.map.Marker({ lat, lng });          } 
+          
+          // Add tooltip if title is provided with enhanced styling
+          if (title && mapMarker) {
+            try {
+              mapMarker.setData({
+                title: title,
+                description: isCurrentLocation
+                  ? "Your current location"
+                  : `Saved location`,
+              });
+
+              // Add tap/click event for all devices if UI is available
+              if (ui) {
+                mapMarker.addEventListener("tap", (evt) => {
+                  try {
+                    const data = evt.target.getData();
+                    const bubble = new window.H.ui.InfoBubble(evt.target.getGeometry(), {
+                      content: `<div class="${styles.infoWindow}">
+                                 <div class="${styles.infoHeader}">${data.title}</div>
+                                 <div class="${styles.infoDescription}">${
+                        data.description            }</div>
+                                 ${
+                                   isCurrentLocation
+                                     ? `<div class="${styles.infoLocationDetails}">
+                                      <span>Lat: ${lat.toFixed(4)}</span>
+                                      <span>Lng: ${lng.toFixed(4)}</span>
+                                    </div>`
+                                     : ""
+                                 }
+                               </div>`,
+                    });
+
+                    // Close any previously opened bubbles
+                    if (ui.getBubbles && typeof ui.getBubbles === 'function') {
+                      ui.getBubbles().forEach((b) => ui.removeBubble(b));
+                    }
+                    ui.addBubble(bubble);
+                  } catch (bubbleError) {
+                    console.error("Error creating info bubble:", bubbleError);
+                  }
+                });
+              }
+            } catch (markerDataError) {
+              console.error("Error setting marker data:", markerDataError);
+            }
+          }
+
+          // Add marker to the marker group
+          try {
+            markerGroup.addObject(mapMarker);
+            mapMarkers.push(mapMarker);
+          } catch (addMarkerError) {
+            console.error("Error adding marker to group:", addMarkerError);
+          }
+        } catch (markerError) {
+          console.error(`Error processing marker ${index}:`, markerError);
+        }
+      });
+        // Add the marker group to the map
+      try {
+        if (markerGroup.getObjects().length > 0) {
+          map.addObject(markerGroup);
+          console.log(`Added marker group with ${markerGroup.getObjects().length} markers`);
+          
+          // Adjust the viewport to see all markers if there's more than one
+          if (mapMarkers.length > 1) {
+            try {
+              const viewModel = map.getViewModel();
+              if (viewModel && typeof viewModel.setLookAtData === 'function') {
+                const bbox = markerGroup.getBoundingBox();
+                if (bbox) {
+                  viewModel.setLookAtData({
+                    bounds: bbox
+                  }, true);
+                  console.log("Adjusted viewport to fit all markers");
+                }
+              }
+            } catch (viewportError) {
+              console.error("Error adjusting viewport:", viewportError);
+            }
+          }
+        }
+      } catch (groupError) {
+        console.error("Error adding marker group to map:", groupError);
+      }
+      
+      return mapMarkers;
+    } catch (markersError) {
+      console.error("Error handling markers:", markersError);
+      return [];
+    }
+  };
+  // Update markers when props change
+  useEffect(() => {
+    if (mapLoaded && mapObject && mapObject.map && markers.length) {
+      try {
+        console.log("Updating markers on props change");
+        // Clear existing markers
+        const existingObjects = mapObject.map.getObjects();
+        if (existingObjects && existingObjects.length) {
+          mapObject.map.removeObjects(existingObjects);
+        }
+
+        // Add new markers
+        addMarkers(mapObject, markers);
+      } catch (markerUpdateError) {
+        console.error("Error updating markers:", markerUpdateError);
+      }
+    }
+  }, [markers, mapLoaded, mapObject]); 
+  
+  // Update center when props change with smooth animation
+  useEffect(() => {
+    if (mapLoaded && mapObject && mapObject.map && center) {
+      try {
+        console.log(`Setting map center to lat:${center.lat}, lng:${center.lng}`);
+        // Use smooth transition for better UX
+        mapObject.map.setCenter({ lat: center.lat, lng: center.lng }, true);
+        mapObject.map.setZoom(zoom, true);
+
+        // Make sure all markers are visible
+        if (markers && markers.length > 1) {
+          try {
+            const group = new window.H.map.Group();
+            
+            // Add each marker to the group
+            markers.forEach((marker) => {
+              try {
+                if (marker && marker.lat && marker.lng) {
+                  group.addObject(
+                    new window.H.map.Marker({ lat: marker.lat, lng: marker.lng })
+                  );
+                }
+              } catch (markerError) {
+                console.error("Error adding marker to group:", markerError);
+              }
+            });
+
+            // Only proceed if we have objects in the group
+            if (group.getObjects().length > 0) {
+              // Get geo bounding box for all markers to ensure they're all visible
+              setTimeout(() => {
+                try {
+                  const viewModel = mapObject.map.getViewModel();
+                  if (viewModel && typeof viewModel.setLookAtData === 'function') {
+                    const bbox = group.getBoundingBox();
+                    if (bbox) {
+                      viewModel.setLookAtData({ bounds: bbox }, true);
+                      console.log("Set viewport to include all markers");
+                    }
+                  }
+                } catch (e) {
+                  console.error("Error setting look at data:", e);
+                  // Fallback if there's an error with the bounding box
+                  mapObject.map.setCenter({ lat: center.lat, lng: center.lng }, true);
+                }
+              }, 100);
+            }          } catch (groupError) {
+            console.error("Error creating marker group for viewport:", groupError);
+          }
+        }
+      } catch (centerError) {
+        console.error("Error setting map center:", centerError);
+      }
+    }
+  }, [center, zoom, mapLoaded, mapObject, markers]);
+
+  // Handle routes if needed  useEffect(() => {
+    if (mapLoaded && mapObject && mapObject.map && mapObject.platform && routes.length > 0) {
+      try {
+        console.log(`Processing ${routes.length} routes`);
+        const { map, platform } = mapObject;
+        // Clear existing routes
+      try {
+        map.getObjects().forEach(obj => {
+          if (obj instanceof window.H.map.Polyline) {
+            map.removeObject(obj);
+          }
+        });
+        console.log("Cleared existing routes");
+      } catch (clearError) {
+        console.error("Error clearing existing routes:", clearError);
+      }
+      
+      try {
+        // Create routing service with version 8 API
+        console.log("Creating routing service");
+        const router = platform.getRoutingService(null, 8);
+        
+        routes.forEach((route, index) => {
+          if (route.points && route.points.length >= 2) {
+            // Format waypoints for routing
+            const waypoints = route.points.map(point => `${point.lat},${point.lng}`);
+            
+            // Create routing parameters
+            const routeParams = {
+              routingMode: 'fast',
+              transportMode: 'car',
+              origin: waypoints[0],
+              destination: waypoints[waypoints.length - 1],
+              via: waypoints.slice(1, -1).join(';'),
+              return: 'polyline,summary,actions,instructions'
+            };
+            
+            // Calculate route
+            router.calculateRoute(routeParams, result => {
+              if (result.routes.length) {
+                const routeData = result.routes[0];
+                const lineString = new window.H.geo.LineString();
+                
+                // Extract route shape
+                routeData.sections.forEach(section => {
+                  section.polyline.map(point => [point.lat, point.lng])
+                    .forEach(coordinates => lineString.pushLatLngAlt(...coordinates));
+                });
+                
+                // Create polyline for the route
+                const routeLine = new window.H.map.Polyline(lineString, {
+                  style: {
+                    lineWidth: 6,
+                    strokeColor: route.color || '#4CAF50',
+                    lineJoin: 'round'
+                  }
+                });
+                
+                // Add route to the map
+                map.addObject(routeLine);
+                
+                // Adjust view to include all routes
+                map.getViewModel().setLookAtData({
+                  bounds: routeLine.getBoundingBox()
+                });
+              }
+            }, error => {
+              console.error('Routing error:', error);
+            });
+          }
+        });
+      } catch (err) {
+        console.error('Error creating routes:', err);
+      }
+    }
+  }, [routes, mapLoaded, mapObject]);
+  
+  // Handle traffic layer toggle
+  useEffect(() => {
+    if (mapLoaded && mapObject && showTraffic) {
+      const { map, platform } = mapObject;
+      try {
+        // Create default layers
+        const defaultLayers = platform.createDefaultLayers();
+        
+        // Add traffic incidents layer
+        const trafficLayer = defaultLayers.vector.normal.traffic;
+        if (trafficLayer) {
+          map.addLayer(trafficLayer);
+        }
+        
+        // Clean up when component unmounts or when showTraffic changes
+        return () => {
+          if (map.getLayers().includes(trafficLayer)) {
+            map.removeLayer(trafficLayer);
+          }
+        };
+      } catch (err) {
+        console.error('Error adding traffic layer:', err);
+      }
+    }
+  }, [showTraffic, mapLoaded, mapObject]);  // Layer selection state
+  const [activeLayer, setActiveLayer] = useState('normal');
+  
+  // Handle layer switch
+  const switchMapLayer = (layerType) => {
+    if (!mapLoaded || !mapObject) return;
+    
+    const { map, platform } = mapObject;
+    const defaultLayers = platform.createDefaultLayers();
+    
+    // Remove current base layer
+    map.getLayers().forEach(layer => {
+      if (layer.getProvider().providerType === 'imagery' || 
+          layer.getProvider().providerType === 'map') {
+        map.removeLayer(layer);
+      }
+    });
+    
+    // Add new base layer based on selection
+    switch (layerType) {
+      case 'satellite':
+        map.addLayer(defaultLayers.raster.satellite.map);
+        break;
+      case 'terrain':
+        map.addLayer(defaultLayers.vector.normal.terrain);
+        break;
+      default:
+        map.addLayer(defaultLayers.vector.normal.map);
+    }
+    
+    setActiveLayer(layerType);
+  };
+
+  return (
+    <div className={styles.mapWrapper}>
+      {error ? (
+        <div className={styles.mapError}>
+          <p>{error}</p>
+        </div>
+      ) : !mapLoaded && !window.H ? (
+        <div className={styles.mapLoading}>
+          <div className={styles.loadingSpinner}></div>
+          <p>Loading map...</p>
+        </div>
+      ) : null}
+      <div
+        ref={mapRef}
+        className={styles.mapContainer}
+        style={{
+          visibility: error ? "hidden" : "visible",
+        }}
+      />
+      
+      {/* Map controls overlay */}
+      {mapLoaded && (
+        <>
+          <div className={styles.mapControls}>
+            <button 
+              className={`${styles.mapLayerButton} ${activeLayer === 'normal' ? styles.active : ''}`} 
+              onClick={() => switchMapLayer('normal')}
+              title="Standard map view"
+            >
+              <FaLayerGroup /> <span>Map</span>
+            </button>
+            <button 
+              className={`${styles.mapLayerButton} ${activeLayer === 'satellite' ? styles.active : ''}`} 
+              onClick={() => switchMapLayer('satellite')}
+              title="Satellite imagery"
+            >
+              <FaLayerGroup /> <span>Satellite</span>
+            </button>
+            <button 
+              className={`${styles.mapLayerButton} ${activeLayer === 'terrain' ? styles.active : ''}`} 
+              onClick={() => switchMapLayer('terrain')}
+              title="Terrain view"
+            >
+              <FaLayerGroup /> <span>Terrain</span>
+            </button>
+          </div>
+          
+          <div className={styles.mapAttribution}>
+            Map data &copy; HERE {new Date().getFullYear()}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default HereMap;

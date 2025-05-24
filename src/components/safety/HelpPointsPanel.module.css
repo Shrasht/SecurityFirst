@@ -1,0 +1,138 @@
+.helpPointsPanel {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+}
+
+.panelTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pointsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.pointsGroup {
+  margin-bottom: 15px;
+}
+
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text-color);
+}
+
+.policeIcon {
+  color: #1565c0;
+}
+
+.hospitalIcon {
+  color: #e53935;
+}
+
+.shelterIcon {
+  color: #43a047;
+}
+
+.pharmacyIcon {
+  color: #00acc1;
+}
+
+.litAreaIcon {
+  color: #ffc107;
+}
+
+.pointsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.helpPoint {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pointInfo {
+  flex: 1;
+}
+
+.pointName {
+  font-weight: 500;
+  margin-bottom: 3px;
+  font-size: 0.95rem;
+}
+
+.pointDistance {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.pointActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  background-color: #f1f1f1;
+  color: #555;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.actionButton:hover {
+  background-color: #e0e0e0;
+}
+
+.emergencyButton {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.emergencyButton button {
+  background-color: var(--danger-color);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.emergencyButton button:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .pointsContainer {
+    grid-template-columns: 1fr;
+  }
+}

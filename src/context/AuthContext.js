@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
@@ -11,14 +11,14 @@ export const AuthProvider = ({ children }) => {
   // Check if user is already logged in
   useEffect(() => {
     const checkAuth = () => {
-      const user = localStorage.getItem('user');
+      const user = localStorage.getItem("user");
       if (user) {
         setCurrentUser(JSON.parse(user));
         setIsAuthenticated(true);
       }
       setLoading(false);
     };
-    
+
     checkAuth();
   }, []);
 
@@ -28,28 +28,47 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       // In a real app, this would be an API call
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Mock successful login
       if (email && password) {
         const user = {
-          id: 'user123',
-          name: 'Jane Doe',
+          id: "user123",
+          name: "Jane Doe",
           email,
-          profilePic: 'https://i.pravatar.cc/150?img=1',
+          profilePic: "https://i.pravatar.cc/150?img=1",
           emergencyContacts: [
-            { id: 1, name: 'Mom', phone: '123-456-7890' },
-            { id: 2, name: 'Dad', phone: '098-765-4321' }
-          ]
+            {
+              id: 1,
+              name: "Mom",
+              phone: "123-456-7890",
+              email: "mom@example.com",
+              relationship: "Mother",
+            },
+            {
+              id: 2,
+              name: "Dad",
+              phone: "098-765-4321",
+              email: "dad@example.com",
+              relationship: "Father",
+            },
+            {
+              id: 3,
+              name: "Best Friend Sarah",
+              phone: "555-123-4567",
+              email: "sarah.friend@example.com",
+              relationship: "Friend",
+            },
+          ],
         };
-        
-        localStorage.setItem('user', JSON.stringify(user));
+
+        localStorage.setItem("user", JSON.stringify(user));
         setCurrentUser(user);
         setIsAuthenticated(true);
         setError(null);
         return user;
       } else {
-        throw new Error('Invalid credentials');
+        throw new Error("Invalid credentials");
       }
     } catch (err) {
       setError(err.message);
@@ -65,25 +84,25 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       // In a real app, this would be an API call
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Mock successful registration
       if (userData.email && userData.password) {
         const user = {
-          id: 'user' + Date.now(),
-          name: userData.name || 'New User',
+          id: "user" + Date.now(),
+          name: userData.name || "New User",
           email: userData.email,
-          profilePic: 'https://i.pravatar.cc/150?img=2',
-          emergencyContacts: []
+          profilePic: "https://i.pravatar.cc/150?img=2",
+          emergencyContacts: [],
         };
-        
-        localStorage.setItem('user', JSON.stringify(user));
+
+        localStorage.setItem("user", JSON.stringify(user));
         setCurrentUser(user);
         setIsAuthenticated(true);
         setError(null);
         return user;
       } else {
-        throw new Error('Invalid user data');
+        throw new Error("Invalid user data");
       }
     } catch (err) {
       setError(err.message);
@@ -92,24 +111,32 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
   // Logout function
   const logout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
     setCurrentUser(null);
     setIsAuthenticated(false);
   };
 
+  // Update user function
+  const updateUser = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setCurrentUser(userData);
+  };
   return (
-    <AuthContext.Provider value={{
-      currentUser,
-      isAuthenticated,
-      loading,
-      error,
-      login,
-      register,
-      logout
-    }}>
+    <AuthContext.Provider
+      value={{
+        currentUser,
+        emergencyContacts: currentUser?.emergencyContacts || [],
+        isAuthenticated,
+        loading,
+        error,
+        login,
+        register,
+        logout,
+        updateUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

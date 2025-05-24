@@ -5,12 +5,15 @@
 }
 
 body {
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f8f9fa;
+  color: var(--text-color);
+  line-height: 1.6;
+  padding-bottom: env(safe-area-inset-bottom, 80px);
 }
 
 code {
@@ -20,15 +23,42 @@ code {
 
 :root {
   --primary-color: #ff4081;
+  --primary-color-rgb: 255, 64, 129;
+  --primary-dark: #c60055;
+  --primary-light: #ff79b0;
+
   --secondary-color: #7c4dff;
+  --secondary-color-rgb: 124, 77, 255;
+  --secondary-dark: #3f1dcb;
+  --secondary-light: #b47cff;
+
   --text-color: #333;
+  --text-light: #666;
+  --text-lighter: #999;
+
   --light-bg: #f8f9fa;
+  --card-bg: #ffffff;
+
   --danger-color: #ff5252;
+  --danger-color-rgb: 255, 82, 82;
   --success-color: #4caf50;
+  --success-color-rgb: 76, 175, 80;
   --warning-color: #ffc107;
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --warning-color-rgb: 255, 193, 7;
+  --info-color: #2196f3;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  --border-radius-sm: 8px;
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+
+  --transition-fast: 0.2s ease;
+  --transition: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --transition-bounce: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 button {

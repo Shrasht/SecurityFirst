@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import styles from './AuthPages.module.css';
-import { AuthContext } from '../context/AuthContext';
-import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa';
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styles from "./AuthPages.module.css";
+import { AuthContext } from "../context/AuthContext";
+import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  const [formError, setFormError] = useState('');
+  const [formError, setFormError] = useState("");
   const { login, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -18,27 +18,27 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setFormError('');
+    setFormError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Basic validation
     if (!formData.email || !formData.password) {
-      setFormError('Please fill in all fields');
+      setFormError("Please fill in all fields");
       return;
     }
 
     try {
       const user = await login(formData.email, formData.password);
       if (user) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
-        setFormError('Invalid email or password');
+        setFormError("Invalid email or password");
       }
     } catch (error) {
-      setFormError('Login failed. Please try again.');
+      setFormError("Login failed. Please try again.");
     }
   };
 
@@ -50,11 +50,7 @@ const Login = () => {
           <p>Sign in to your account to continue</p>
         </div>
 
-        {formError && (
-          <div className={styles.errorMessage}>
-            {formError}
-          </div>
-        )}
+        {formError && <div className={styles.errorMessage}>{formError}</div>}
 
         <form className={styles.authForm} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
@@ -90,12 +86,14 @@ const Login = () => {
             </div>
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className={styles.authButton}
             disabled={loading}
           >
-            {loading ? 'Signing in...' : (
+            {loading ? (
+              "Signing in..."
+            ) : (
               <>
                 Sign In <FaSignInAlt />
               </>

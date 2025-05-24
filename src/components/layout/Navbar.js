@@ -1,8 +1,14 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import styles from './Navbar.module.css';
-import { FaUserCircle, FaBars, FaTimes, FaBell } from 'react-icons/fa';
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import styles from "./Navbar.module.css";
+import {
+  FaUserCircle,
+  FaBars,
+  FaTimes,
+  FaBell,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 
 const Navbar = () => {
   const { isAuthenticated, currentUser, logout } = useContext(AuthContext);
@@ -11,7 +17,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
     setMenuOpen(false);
   };
 
@@ -31,38 +37,76 @@ const Navbar = () => {
           {menuOpen ? <FaTimes /> : <FaBars />}
         </div>
 
-        <ul className={`${styles.navMenu} ${menuOpen ? styles.active : ''}`}>
+        <ul className={`${styles.navMenu} ${menuOpen ? styles.active : ""}`}>
           <li className={styles.navItem}>
-            <Link to="/" className={styles.navLink} onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link
+              to="/"
+              className={styles.navLink}
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
           </li>
-          
+
           {isAuthenticated ? (
             <>
               <li className={styles.navItem}>
-                <Link to="/dashboard" className={styles.navLink} onClick={() => setMenuOpen(false)}>Dashboard</Link>
+                <Link
+                  to="/dashboard"
+                  className={styles.navLink}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
               </li>
               <li className={styles.navItem}>
-                <Link to="/safe-routes" className={styles.navLink} onClick={() => setMenuOpen(false)}>Safe Routes</Link>
+                <Link
+                  to="/safe-routes"
+                  className={styles.navLink}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Safe Routes
+                </Link>
               </li>
               <li className={styles.navItem}>
-                <Link to="/saved-places" className={styles.navLink} onClick={() => setMenuOpen(false)}>Saved Places</Link>
+                <Link
+                  to="/saved-places"
+                  className={styles.navLink}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Saved Places
+                </Link>
+              </li>{" "}
+              <li className={styles.emergencyButton}>
+                <Link
+                  to="/emergency-alert"
+                  className={styles.emergencyLink}
+                  title="Emergency Alert"
+                >
+                  <FaExclamationTriangle />
+                  <span>Alert</span>
+                </Link>
               </li>
               <li className={styles.navNotification}>
                 <FaBell />
               </li>
               <li className={styles.navProfile}>
                 {currentUser?.profilePic ? (
-                  <img 
-                    src={currentUser.profilePic} 
-                    alt={currentUser.name} 
-                    className={styles.profilePic} 
+                  <img
+                    src={currentUser.profilePic}
+                    alt={currentUser.name}
+                    className={styles.profilePic}
                   />
                 ) : (
                   <FaUserCircle />
                 )}
                 <div className={styles.profileDropdown}>
-                  <Link to="/profile" onClick={() => setMenuOpen(false)}>My Profile</Link>
-                  <Link to="/settings" onClick={() => setMenuOpen(false)}>Settings</Link>
+                  <Link to="/profile" onClick={() => setMenuOpen(false)}>
+                    My Profile
+                  </Link>
+                  <Link to="/settings" onClick={() => setMenuOpen(false)}>
+                    Settings
+                  </Link>
                   <button onClick={handleLogout}>Logout</button>
                 </div>
               </li>
@@ -70,10 +114,20 @@ const Navbar = () => {
           ) : (
             <>
               <li className={styles.navItem}>
-                <Link to="/login" className={styles.navLink} onClick={() => setMenuOpen(false)}>Login</Link>
+                <Link
+                  to="/login"
+                  className={styles.navLink}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Login
+                </Link>
               </li>
               <li className={styles.navItem}>
-                <Link to="/register" className={`${styles.navLink} ${styles.btnRegister}`} onClick={() => setMenuOpen(false)}>
+                <Link
+                  to="/register"
+                  className={`${styles.navLink} ${styles.btnRegister}`}
+                  onClick={() => setMenuOpen(false)}
+                >
                   Register
                 </Link>
               </li>

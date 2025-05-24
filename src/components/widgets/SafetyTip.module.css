@@ -1,11 +1,18 @@
 .safetyTipCard {
-  background: white;
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  padding: 16px;
+  background: linear-gradient(135deg, #fffdf7 0%, #fff8e6 100%);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
   height: 100%;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.safetyTipCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(255, 193, 7, 0.15);
 }
 
 .cardTitle {
@@ -23,19 +30,33 @@
 }
 
 .tipIconContainer {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background-color: rgba(255, 193, 7, 0.1);
+  background-color: rgba(255, 193, 7, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.2);
+  animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-warning {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
 }
 
 .tipIcon {
   color: var(--warning-color);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 
 .tipText {

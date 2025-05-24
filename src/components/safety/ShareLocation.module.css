@@ -1,0 +1,617 @@
+/* Share Location Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: white;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.headerIcon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Location Info Section */
+.locationInfo {
+  padding: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.locationCard {
+  display: flex;
+  align-items: flex-start;
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #2196f3;
+}
+
+.locationIcon {
+  color: #2196f3;
+  font-size: 1.5rem;
+  margin-right: 12px;
+  margin-top: 4px;
+}
+
+.locationDetails h3 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.locationDetails p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.coordinates {
+  font-family: "Courier New", monospace;
+  background: #e3f2fd;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem !important;
+}
+
+.timestamp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #888 !important;
+  font-size: 0.8rem !important;
+}
+
+.noLocation {
+  color: #ff6b6b !important;
+  font-style: italic;
+}
+
+/* Message Section */
+.messageSection {
+  padding: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.messageSection label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.messageInput {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.messageInput:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+/* Contacts Section */
+.contactsSection {
+  padding: 24px;
+}
+
+.contactsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.contactsSection h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.addContactButton {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s;
+}
+
+.addContactButton:hover {
+  background: #45a049;
+}
+
+/* Add Contact Form */
+.addContactForm {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.addContactForm h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.formRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.formGroup {
+  flex: 1;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.cancelAddButton {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancelAddButton:hover {
+  background: #5a6268;
+}
+
+.saveContactButton {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s;
+}
+
+.saveContactButton:hover {
+  background: #45a049;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+.sectionIcon {
+  margin-right: 8px;
+  color: #2196f3;
+}
+
+.contactsList {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.contactItem:hover {
+  border-color: #2196f3;
+  background: #f8f9fa;
+}
+
+.contactItem.selected {
+  border-color: #4caf50;
+  background: #e8f5e8;
+}
+
+.contactInfo {
+  flex: 1;
+}
+
+.contactName {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contactIcon {
+  color: #2196f3;
+  font-size: 0.9rem;
+}
+
+.contactDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.contactDetail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contactDetail svg {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.relationship {
+  color: #2196f3;
+  font-style: italic;
+  margin-left: 8px;
+}
+
+.contactItem.selected {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.contactInfo {
+  flex: 1;
+}
+
+.contactName {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.contactDetails {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.relationship {
+  color: #888;
+  font-style: italic;
+}
+
+.checkbox {
+  color: #2196f3;
+  font-size: 1.2rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.contactItem.selected .checkbox {
+  opacity: 1;
+}
+
+.noContacts {
+  text-align: center;
+  padding: 32px 16px;
+  color: #666;
+}
+
+.noContacts svg {
+  font-size: 3rem;
+  color: #ff9800;
+  margin-bottom: 12px;
+}
+
+.noContacts p {
+  margin: 8px 0;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 12px;
+  padding: 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.cancelButton,
+.shareButton {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cancelButton {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.shareButton {
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+  color: white;
+}
+
+.shareButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  transform: translateY(-1px);
+}
+
+.shareButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Result Section */
+.resultSection {
+  padding: 24px;
+}
+
+.resultCard {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.resultCard.success {
+  background: #e8f5e8;
+  border-left: 4px solid #4caf50;
+}
+
+.resultCard.error {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.resultIcon {
+  margin-right: 16px;
+  font-size: 2rem;
+}
+
+.successIcon {
+  color: #4caf50;
+}
+
+.errorIcon {
+  color: #f44336;
+}
+
+.resultMessage h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.resultMessage p {
+  margin: 0 0 12px 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.emailsList,
+.errorsList {
+  margin-top: 12px;
+}
+
+.emailsList h4,
+.errorsList h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.emailsList ul,
+.errorsList ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.85rem;
+}
+
+.emailsList li {
+  color: #4caf50;
+  margin-bottom: 4px;
+}
+
+.errorsList li {
+  color: #f44336;
+  margin-bottom: 4px;
+}
+
+.resultActions {
+  display: flex;
+  justify-content: center;
+}
+
+.doneButton {
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.doneButton:hover {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .modalHeader {
+    padding: 16px 20px;
+  }
+
+  .locationInfo,
+  .messageSection,
+  .contactsSection,
+  .actions,
+  .resultSection {
+    padding: 20px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .cancelButton,
+  .shareButton {
+    width: 100%;
+  }
+}

@@ -1,17 +1,17 @@
-import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import styles from './AuthPages.module.css';
-import { AuthContext } from '../context/AuthContext';
-import { FaUser, FaEnvelope, FaLock, FaUserPlus } from 'react-icons/fa';
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styles from "./AuthPages.module.css";
+import { AuthContext } from "../context/AuthContext";
+import { FaUser, FaEnvelope, FaLock, FaUserPlus } from "react-icons/fa";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
-  const [formError, setFormError] = useState('');
+  const [formError, setFormError] = useState("");
   const { register, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -20,32 +20,37 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setFormError('');
+    setFormError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Basic validation
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      setFormError('Please fill in all fields');
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      setFormError("Please fill in all fields");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setFormError('Passwords do not match');
+      setFormError("Passwords do not match");
       return;
     }
 
     try {
       const user = await register(formData);
       if (user) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
-        setFormError('Registration failed. Please try again.');
+        setFormError("Registration failed. Please try again.");
       }
     } catch (error) {
-      setFormError('Registration failed. Please try again.');
+      setFormError("Registration failed. Please try again.");
     }
   };
 
@@ -57,11 +62,7 @@ const Register = () => {
           <p>Join SafetyFirst to stay protected</p>
         </div>
 
-        {formError && (
-          <div className={styles.errorMessage}>
-            {formError}
-          </div>
-        )}
+        {formError && <div className={styles.errorMessage}>{formError}</div>}
 
         <form className={styles.authForm} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
@@ -124,12 +125,14 @@ const Register = () => {
             </div>
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className={styles.authButton}
             disabled={loading}
           >
-            {loading ? 'Creating Account...' : (
+            {loading ? (
+              "Creating Account..."
+            ) : (
               <>
                 Sign Up <FaUserPlus />
               </>
